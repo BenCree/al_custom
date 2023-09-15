@@ -7,6 +7,10 @@ from modAL import models
 from al_for_fep import single_cycle_lib
 from al_for_fep.utils import utils
 
+from sklearn.preprocessing import MinMaxScaler
+import seaborn as sns
+import pandas as pd
+import matplotlib.pyplot as plt
 
 TRAINING_KEY = 'Training'
 
@@ -94,3 +98,4 @@ class ALCycler(single_cycle_lib.MakitaCycle):
 
         # selections, virtual_library
         return selection_pool.iloc[selection_idx][selection_columns], virtual_library
+

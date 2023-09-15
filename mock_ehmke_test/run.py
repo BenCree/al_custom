@@ -24,7 +24,7 @@ from al_for_fep.configs.simple_greedy_gaussian_process import get_config as get_
 import ncl_cycle
 from ncl_cycle import ALCycler
 
-oracle = pd.read_csv("oracle.csv")
+oracle = pd.read_csv("gen.csv")
 oracle.sort_values(by='cnnaffinity', ascending=False, inplace=True)
 # find 5% best values cutoff
 cutoff = oracle[:int(0.05*len(oracle))].cnnaffinity.values[0]
@@ -56,9 +56,9 @@ if __name__ == '__main__':
     print('Attaching trainings:', previous_trainings)
 
     config = get_gaussian_process_config()
-    config.training_pool = ','.join(["prechosen_ones_10_random.csv"] + previous_trainings)
-    config.virtual_library = "large.csv"
-    config.selection_config.num_elements = 100    # how many new to select
+    config.training_pool = ','.join(["worst.csv"] + previous_trainings)
+    config.virtual_library = "gen.csv"
+    config.selection_config.num_elements = 200    # how many new to select
     config.selection_config.selection_columns = ["cnnaffinity", "Smiles"]
     config.model_config.targets.params.feature_column = 'cnnaffinity'
 
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     if previous_trainings:
         cycle_start = max(int(re.findall("[\d]+", cycle)[0]) for cycle in previous_trainings)
 
-    for cycle_id in range(cycle_start, 400):
+    for cycle_id in range(cycle_start, 5):
         start_time = time.time()
         chosen_ones, virtual_library_regression = AL.run_cycle(virtual_library)
 
